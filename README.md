@@ -1,8 +1,9 @@
 # autocomplete
 
+
 How to run:
 
-scripts/run-local-docker.sh
+./scripts/run-local-docker.sh
 
 Notice: 
  
