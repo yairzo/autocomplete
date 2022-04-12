@@ -1,0 +1,17 @@
+version: '3'
+services:
+  api-service:
+    build: ./
+    volumes:
+    - ./:/usr/src/app/
+    ports:
+    - "5001:5001"
+    environment:
+      PORT: 5001
+    logging:
+      driver: awslogs
+      options:
+        awslogs-group: scrap
+        awslogs-region: eu-central-1
+        awslogs-stream-prefix: web
+

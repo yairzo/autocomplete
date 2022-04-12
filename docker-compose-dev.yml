@@ -1,0 +1,37 @@
+version: '3'
+services:
+  api-service:
+    build: ./
+    volumes:
+    - ./:/usr/src/app/
+    ports:
+    - "5001:5001"
+    environment:
+      DOCKER_MACHINE_IP: "192.168.32.1"
+      PORT: 5001
+      FLASK_DEBUG: 1
+      ES_INDEX_CHUNK_SIZE: 500
+      ES_SEARCH_RESULTS_SIZE: 500
+    depends_on:
+      - elasticsearch
+  elasticsearch:
+    build: elasticsearch/
+    volumes:
+      - ./elasticsearch/config/elasticsearch.yml:/usr/share/elasticsearch/config/elasticsearch.yml
+    ports:
+      - "9200:9200"
+      - "9300:9300"
+    environment:
+      - "cluster.name=elasticsearch"
+      - "ES_JAVA_OPTS=-Xms256m -Xmx256m"
+      - "XPACK_SECURITY_ENABLED=false"
+    networks:
+      - elk
+    healthcheck:
+      test: "curl http://elasticsearch:9200"
+      interval: "1s"
+      timeout: "3s"
+      retries: 60
+networks:
+  elk:
+    driver: bridge
